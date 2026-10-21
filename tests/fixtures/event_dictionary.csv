@@ -1,0 +1,6 @@
+event_name,description,trigger,platforms,properties,owner,status
+autopay_enrollment_submitted,AutoPay enrollment submitted,Server confirms,app|web,payment_method_type:string,Billing,active
+planCompareSelected,Legacy camelCase plan selection,Select tapped,app,plan_id:string;monthly_price:string,Plans,active
+trade_in_quote_viewed,Trade-in quote viewed,Quote rendered,web,device_model:string,Device,active
+chat_escalated,Old escalation event,Escalate tapped,app,reason:string,Care,deprecated
+bill_viewed,Bill viewed,Bill page rendered,app|web,bill_period:string,Billing,active

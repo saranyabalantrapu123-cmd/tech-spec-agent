@@ -1,0 +1,850 @@
+{
+  "title": "Unified plan comparison page across app and web",
+  "overview": "Unified plan comparison page across app and web for Nimbus Wireless customers on app or web. Headline ask: A single plan comparison page with the same layout and plan attributes on app and web. This spec captures 7 functional and 3 non-functional requirements, 4 tracking events, the rollout and test plan, and the open questions the request leaves unanswered (section 15).",
+  "problem_statement": "Today the app shows plans as a carousel of cards while the website has a comparison table, and the two show different plan attributes. Customers who start on one surface and finish on the other get confused. Analytics cannot compare the two funnels because the events are named differently on each platform. We'd like to run this as an experiment against the current pages.",
+  "goals": [
+    "Increase plan change conversion from the comparison page",
+    "Get one funnel for app and web"
+  ],
+  "non_goals": [
+    "Changing plan prices or creating new plans",
+    "Prepaid plans (Nimbus Prepaid will follow later)"
+  ],
+  "user_stories": [
+    {
+      "id": "US-1",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "a single plan comparison page with the same layout and plan attributes on app and web",
+      "so_that": "it supports the goal: increase plan change conversion from the comparison page",
+      "priority": "should",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the plan comparison",
+          "then": "there is a single plan comparison page with the same layout and plan attributes on app and web"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they use the plan comparison",
+          "then": "`plan_comparison_viewed` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-2",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "to select up to 3 plans to compare side by side",
+      "so_that": "it supports the goal: increase plan change conversion from the comparison page",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they select up to 3 plans to compare side by side",
+          "then": "the customer can select up to 3 plans to compare side by side"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they select up to 3 plans to compare side by side",
+          "then": "`plan_comparison_plan_selected` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-3",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "to see monthly price, data allowance, hotspot allowance and included perks for each plan",
+      "so_that": "it supports the goal: increase plan change conversion from the comparison page",
+      "priority": "should",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the plan comparison",
+          "then": "the page shows monthly price, data allowance, hotspot allowance and included perks for each plan"
+        }
+      ]
+    },
+    {
+      "id": "US-4",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "to filter plans by number of lines",
+      "so_that": "it supports the goal: increase plan change conversion from the comparison page",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they filter plans by number of lines",
+          "then": "the customer can filter plans by number of lines"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they filter plans by number of lines",
+          "then": "`plan_comparison_filter_applied` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-5",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "selecting a plan to take me to the existing plan change checkout",
+      "so_that": "it supports the goal: increase plan change conversion from the comparison page",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the plan comparison",
+          "then": "selecting a plan takes the customer to the existing plan change checkout"
+        }
+      ]
+    },
+    {
+      "id": "US-6",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "plan content to come from the Plan Catalog API so app and web never disagree",
+      "so_that": "it supports the goal: increase plan change conversion from the comparison page",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the plan comparison",
+          "then": "plan content comes from the Plan Catalog API so app and web never disagree"
+        }
+      ]
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-1",
+      "description": "A single plan comparison page with the same layout and plan attributes on app and web.",
+      "priority": "should",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-4"
+      ]
+    },
+    {
+      "id": "FR-2",
+      "description": "Customers must be able to select up to 3 plans to compare side by side.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-5"
+      ]
+    },
+    {
+      "id": "FR-3",
+      "description": "Show monthly price, data allowance, hotspot allowance and included perks for each plan.",
+      "priority": "should",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-6"
+      ]
+    },
+    {
+      "id": "FR-4",
+      "description": "Customers must be able to filter plans by number of lines.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-7"
+      ]
+    },
+    {
+      "id": "FR-5",
+      "description": "Selecting a plan must take the customer to the existing plan change checkout.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-8"
+      ]
+    },
+    {
+      "id": "FR-6",
+      "description": "Plan content must come from the Plan Catalog API so app and web never disagree.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-9"
+      ]
+    },
+    {
+      "id": "FR-7",
+      "description": "Use the same event names on both platforms.",
+      "priority": "should",
+      "category": "analytics",
+      "source": "input",
+      "refs": [
+        "F-13"
+      ]
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "NFR-1",
+      "description": "The page should be fast and look modern, with better accessibility [measurable target for 'fast', 'modern', 'better' TBD: OQ-2].",
+      "priority": "should",
+      "category": "performance & usability",
+      "source": "input",
+      "refs": [
+        "F-10",
+        "OQ-2"
+      ]
+    },
+    {
+      "id": "NFR-2",
+      "description": "All new UI on app or web meets WCAG 2.1 AA (screen-reader labels, 4.5:1 contrast, full keyboard/switch access).",
+      "priority": "must",
+      "category": "accessibility",
+      "source": "assumption",
+      "refs": [
+        "A-1"
+      ]
+    },
+    {
+      "id": "NFR-3",
+      "description": "Tracking events contain zero PII: no names, phone numbers, free-text message content or full account/card numbers.",
+      "priority": "must",
+      "category": "privacy",
+      "source": "assumption",
+      "refs": [
+        "A-2"
+      ]
+    }
+  ],
+  "analytics": {
+    "naming_convention": "snake_case <object>_<action>; action is a past-tense verb (viewed, selected, submitted…)",
+    "global_properties": [
+      {
+        "name": "platform",
+        "type": "enum",
+        "required": true,
+        "description": "Surface the event fired on (app or web)",
+        "allowed_values": [
+          "app",
+          "web"
+        ],
+        "example": null
+      },
+      {
+        "name": "brand",
+        "type": "enum",
+        "required": true,
+        "description": "Brand the customer account belongs to",
+        "allowed_values": [
+          "nimbus_wireless",
+          "nimbus_prepaid"
+        ],
+        "example": null
+      },
+      {
+        "name": "session_id",
+        "type": "string",
+        "required": true,
+        "description": "Analytics session identifier",
+        "allowed_values": null,
+        "example": null
+      }
+    ],
+    "events": [
+      {
+        "name": "plan_comparison_viewed",
+        "description": "The plan comparison is displayed to the customer",
+        "trigger": "Fires once per page load when the plan comparison is at least 50% in the viewport",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "entry_point",
+            "type": "string",
+            "required": true,
+            "description": "Screen or link the customer came from",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "screen_name",
+            "type": "string",
+            "required": true,
+            "description": "App screen or web page",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "modified",
+        "related_requirements": [
+          "FR-1",
+          "FR-3"
+        ]
+      },
+      {
+        "name": "plan_comparison_plan_selected",
+        "description": "Customer selected an item to compare or buy",
+        "trigger": "Customer taps the select control on an item card",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "plan_id",
+            "type": "string",
+            "required": true,
+            "description": "Catalog ID of the plan",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "monthly_price",
+            "type": "number",
+            "required": true,
+            "description": "Monthly price shown, in USD",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "position",
+            "type": "integer",
+            "required": true,
+            "description": "1-based position of the item on the page",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-2",
+          "FR-5"
+        ]
+      },
+      {
+        "name": "plan_comparison_filter_applied",
+        "description": "Customer applied a filter",
+        "trigger": "Filter value changes and results re-render",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "filter_name",
+            "type": "string",
+            "required": true,
+            "description": "Filter used",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "filter_value",
+            "type": "string",
+            "required": true,
+            "description": "Value chosen",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-4"
+        ]
+      },
+      {
+        "name": "plan_comparison_failed",
+        "description": "The plan comparison could not load or return a result",
+        "trigger": "Client receives an error or a timeout from the backing service",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "error_code",
+            "type": "string",
+            "required": true,
+            "description": "Service or client error code",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "failure_stage",
+            "type": "string",
+            "required": true,
+            "description": "Step where the failure happened",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-6"
+        ]
+      }
+    ],
+    "success_metrics": [
+      {
+        "name": "Increase plan change conversion from the comparison page",
+        "definition": "Sessions with `plan_comparison_plan_selected` ÷ sessions with `plan_comparison_viewed`, split by platform",
+        "target": "TBD (OQ-3)",
+        "events": [
+          "plan_comparison_viewed",
+          "plan_comparison_plan_selected"
+        ]
+      },
+      {
+        "name": "Get one funnel for app and web",
+        "definition": "Share of `plan_comparison_viewed` → `plan_comparison_plan_selected` funnel volume reported from identical event names on app and web (split by `platform`); 100% when no platform-specific events remain",
+        "target": "TBD (OQ-4)",
+        "events": [
+          "plan_comparison_viewed",
+          "plan_comparison_plan_selected"
+        ]
+      }
+    ]
+  },
+  "data_model_changes": [
+    {
+      "entity": "Event dictionary",
+      "change_type": "add",
+      "fields": [
+        "plan_comparison_failed",
+        "plan_comparison_filter_applied",
+        "plan_comparison_plan_selected"
+      ],
+      "description": "Register the new tracking events; update the modified ones: plan_comparison_viewed.",
+      "source": "assumption"
+    }
+  ],
+  "api_changes": [
+    {
+      "method": "GET",
+      "path": "/v1/plan-catalog",
+      "change_type": "add",
+      "description": "PROPOSED client-facing read endpoint backed by Plan Catalog API (A-3); confirm contract, auth and caching.",
+      "source": "assumption"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "Plan Catalog API",
+      "type": "service",
+      "description": "Plan content must come from the Plan Catalog API so app and web never disagree",
+      "source": "input"
+    },
+    {
+      "name": "Analytics / event dictionary owners",
+      "type": "team",
+      "description": "Review new and modified events before release.",
+      "source": "assumption"
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "EC-1",
+      "scenario": "Plan Catalog API times out or returns an error",
+      "expected_behavior": "Show a non-blocking error state, let the customer continue, and fire `plan_comparison_failed` with error_code.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-2",
+      "scenario": "Customer tries to select more than 3 items",
+      "expected_behavior": "Selection beyond 3 is blocked with an inline message.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-3",
+      "scenario": "A filter combination returns no results",
+      "expected_behavior": "Show an empty state with a reset action.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-4",
+      "scenario": "Customer in a group whose eligibility is unresolved (OQ-1: Can logged-out visitors see the page?)",
+      "expected_behavior": "Behaviour follows the answer to OQ-1; until it is resolved the feature stays hidden for that group.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-5",
+      "scenario": "Customer starts on app and finishes on web (or vice versa)",
+      "expected_behavior": "Same content on both; events keep identical names and differ only in `platform`.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-6",
+      "scenario": "Analytics is blocked or consent is declined",
+      "expected_behavior": "The feature works normally; no events are sent and no errors are shown.",
+      "source": "assumption"
+    }
+  ],
+  "rollout": {
+    "feature_flag": "plan_comparison_enabled",
+    "phases": [
+      {
+        "name": "Internal dogfood",
+        "audience": "Employee and test accounts",
+        "exposure_percent": 0,
+        "exit_criteria": "No P1/P2 defects; all events validated in the analytics debugger"
+      },
+      {
+        "name": "Pilot",
+        "audience": "Nimbus Wireless customers on app or web",
+        "exposure_percent": 5,
+        "exit_criteria": "Error rate and care contacts at or below baseline for 7 days"
+      },
+      {
+        "name": "Ramp",
+        "audience": "Same",
+        "exposure_percent": 50,
+        "exit_criteria": "Primary metric not worse than control"
+      },
+      {
+        "name": "General availability",
+        "audience": "All eligible customers",
+        "exposure_percent": 100,
+        "exit_criteria": "Experiment readout signed off"
+      }
+    ],
+    "experiment": {
+      "hypothesis": "Exposing the unified plan comparison page across app and web improves: Increase plan change conversion from the comparison page.",
+      "variants": [
+        "control: current experience",
+        "treatment: unified plan comparison page across app and web"
+      ],
+      "randomization_unit": "customer account (all lines on an account see the same variant)",
+      "primary_metric": "Increase plan change conversion from the comparison page",
+      "guardrail_metrics": [
+        "`plan_comparison_failed` rate",
+        "care contact rate"
+      ],
+      "minimum_detectable_effect": "TBD (OQ-5)"
+    },
+    "rollback_plan": "Turn off `plan_comparison_enabled`; customers fall back to the current experience. Basis: A-4.",
+    "source": "assumption"
+  },
+  "test_plan": [
+    {
+      "id": "TC-1",
+      "title": "Verify FR-1",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the plan comparison"
+      ],
+      "expected_result": "There is a single plan comparison page with the same layout and plan attributes on app and web",
+      "covers": [
+        "FR-1",
+        "US-1"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify FR-2",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they select up to 3 plans to compare side by side"
+      ],
+      "expected_result": "The customer can select up to 3 plans to compare side by side",
+      "covers": [
+        "FR-2",
+        "US-2"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify FR-3",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the plan comparison"
+      ],
+      "expected_result": "The page shows monthly price, data allowance, hotspot allowance and included perks for each plan",
+      "covers": [
+        "FR-3",
+        "US-3"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify FR-4",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they filter plans by number of lines"
+      ],
+      "expected_result": "The customer can filter plans by number of lines",
+      "covers": [
+        "FR-4",
+        "US-4"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-5",
+      "title": "Verify FR-5",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the plan comparison"
+      ],
+      "expected_result": "Selecting a plan takes the customer to the existing plan change checkout",
+      "covers": [
+        "FR-5",
+        "US-5"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-6",
+      "title": "Verify FR-6",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the plan comparison"
+      ],
+      "expected_result": "Plan content comes from the Plan Catalog API so app and web never disagree",
+      "covers": [
+        "FR-6",
+        "US-6"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-7",
+      "title": "Verify FR-7",
+      "type": "analytics",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in FR-7"
+      ],
+      "expected_result": "Use the same event names on both platforms",
+      "covers": [
+        "FR-7"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-8",
+      "title": "Verify NFR-1",
+      "type": "performance",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-1"
+      ],
+      "expected_result": "The page is fast and look modern, with better accessibility",
+      "covers": [
+        "NFR-1"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-9",
+      "title": "Verify NFR-2",
+      "type": "accessibility",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-2"
+      ],
+      "expected_result": "All new UI on app or web meets WCAG 2.1 AA (screen-reader labels, 4.5:1 contrast, full keyboard/switch access)",
+      "covers": [
+        "NFR-2"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-10",
+      "title": "Verify NFR-3",
+      "type": "analytics",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-3"
+      ],
+      "expected_result": "Tracking events contain zero PII: no names, phone numbers, free-text message content or full account/card numbers",
+      "covers": [
+        "NFR-3"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-11",
+      "title": "Analytics: `plan_comparison_viewed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Fires once per page load when the plan comparison is at least 50% in the viewport",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: entry_point, screen_name; values match the UI.",
+      "covers": [
+        "FR-1",
+        "FR-3"
+      ],
+      "events_verified": [
+        "plan_comparison_viewed"
+      ]
+    },
+    {
+      "id": "TC-12",
+      "title": "Analytics: `plan_comparison_plan_selected` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Customer taps the select control on an item card",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: plan_id, monthly_price, position; values match the UI.",
+      "covers": [
+        "FR-2",
+        "FR-5"
+      ],
+      "events_verified": [
+        "plan_comparison_plan_selected"
+      ]
+    },
+    {
+      "id": "TC-13",
+      "title": "Analytics: `plan_comparison_filter_applied` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Filter value changes and results re-render",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: filter_name, filter_value; values match the UI.",
+      "covers": [
+        "FR-4"
+      ],
+      "events_verified": [
+        "plan_comparison_filter_applied"
+      ]
+    },
+    {
+      "id": "TC-14",
+      "title": "Analytics: `plan_comparison_failed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Client receives an error or a timeout from the backing service",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: error_code, failure_stage; values match the UI.",
+      "covers": [
+        "FR-6"
+      ],
+      "events_verified": [
+        "plan_comparison_failed"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "description": "Event names drift between app and web, breaking the cross-platform funnel",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "Treat section 7 as the single source; lint against the event dictionary in CI."
+    },
+    {
+      "description": "Plan Catalog API latency or outage degrades the experience",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Timeouts with graceful fallback; alert on the failed-event rate."
+    },
+    {
+      "description": "1 blocking open question(s) delay build start",
+      "likelihood": "high",
+      "impact": "medium",
+      "mitigation": "Review open questions with owners before sprint planning."
+    },
+    {
+      "description": "Experiment is under-powered for the expected effect",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Size the test once the MDE is agreed."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A-1",
+      "statement": "Accessibility follows the company default of WCAG 2.1 AA.",
+      "validate_with": "UX Design"
+    },
+    {
+      "id": "A-2",
+      "statement": "Analytics events must not carry PII; this is standard instrumentation policy.",
+      "validate_with": "Privacy / Analytics governance"
+    },
+    {
+      "id": "A-3",
+      "statement": "API contracts below are placeholders until the owning team confirms them.",
+      "validate_with": "Owning engineering teams"
+    },
+    {
+      "id": "A-4",
+      "statement": "Rollout stages follow the standard flag-based ramp.",
+      "validate_with": "Release management"
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "OQ-1",
+      "question": "Can logged-out visitors see the page?",
+      "why_it_matters": "The request explicitly leaves this open; it changes scope or eligibility logic.",
+      "suggested_owner": "Product",
+      "blocking": true
+    },
+    {
+      "id": "OQ-2",
+      "question": "What measurable target defines 'fast', 'modern', 'better' in: \"The page should be fast and look modern, with better accessibility\"?",
+      "why_it_matters": "Without a threshold the requirement cannot be tested or accepted.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-3",
+      "question": "What is the target and timeframe for: \"Increase plan change conversion from the comparison page\"?",
+      "why_it_matters": "Success metrics need a target to size the rollout and judge the launch.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-4",
+      "question": "What is the target and timeframe for: \"Get one funnel for app and web\"?",
+      "why_it_matters": "Success metrics need a target to size the rollout and judge the launch.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-5",
+      "question": "What are the primary metric, minimum detectable effect and planned duration of the experiment?",
+      "why_it_matters": "Needed to size the test and decide when to stop it.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-6",
+      "question": "Is `plan_comparison_plan_selected` the same user action as existing `PlanCompare_Select`? If so, reuse the existing event.",
+      "why_it_matters": "Avoids two events for one action, which double-counts the funnel.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-7",
+      "question": "Property 'monthly_price' is 'number' here but 'string' in the dictionary (on 'PlanCompare_Select'). Align the type or version the property?",
+      "why_it_matters": "Conflicting types break joins and dashboards across events.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    }
+  ],
+  "meta": {
+    "mode": "offline-demo",
+    "model": "mock",
+    "pipeline": "full",
+    "source_file": "examples/inputs/plan_comparison.md",
+    "generated_at": "2026-10-21 07:39 UTC",
+    "generator": "tech-spec-agent"
+  }
+}

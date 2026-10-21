@@ -1,0 +1,911 @@
+{
+  "title": "Trade-in estimate in phone checkout",
+  "overview": "Trade-in estimate in phone checkout for Nimbus Wireless customers on app or web. Headline ask: Customers should be able to enter their current device model and condition during phone checkout and see an estimated trade-in value. This spec captures 6 functional and 3 non-functional requirements, 6 tracking events, the rollout and test plan, and the open questions the request leaves unanswered (section 15).",
+  "problem_statement": "Customers who upgrade their phone often abandon checkout at the trade-in step because they don't know what their current device is worth until after they ship it. Trade-in value is one of the top questions in upgrade calls to care. We want to give customers an instant estimate before they commit.",
+  "goals": [
+    "Increase checkout completion for upgrade orders",
+    "Reduce trade-in related calls to care"
+  ],
+  "non_goals": [
+    "Changing the device inspection process",
+    "Trade-in for tablets and wearables (phones only for now)"
+  ],
+  "user_stories": [
+    {
+      "id": "US-1",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "to enter my current device model and condition during phone checkout and see an estimated trade-in value",
+      "so_that": "it supports the goal: increase checkout completion for upgrade orders",
+      "priority": "should",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they enter their current device model and condition during phone checkout",
+          "then": "an estimated trade-in value is displayed"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they enter their current device model and condition during phone checkout",
+          "then": "`trade_in_estimate_started` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-2",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "the estimate to be applied as a credit preview in the order summary",
+      "so_that": "it supports the goal: increase checkout completion for upgrade orders",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the trade-in estimate",
+          "then": "the estimate is applied as a credit preview in the order summary"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they use the trade-in estimate",
+          "then": "`trade_in_estimate_completed` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-3",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "to skip the trade-in step and continue checkout",
+      "so_that": "it supports the goal: increase checkout completion for upgrade orders",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they skip the trade-in step and continue checkout",
+          "then": "the customer can skip the trade-in step and continue checkout"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they skip the trade-in step and continue checkout",
+          "then": "`trade_in_estimate_skipped` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-4",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "the estimate to come from the existing Trade-In Pricing Service",
+      "so_that": "it supports the goal: increase checkout completion for upgrade orders",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the trade-in estimate",
+          "then": "the estimate comes from the existing Trade-In Pricing Service"
+        }
+      ]
+    },
+    {
+      "id": "US-5",
+      "as_a": "Nimbus Wireless customer",
+      "i_want": "to see a disclaimer that the final value is confirmed after device inspection",
+      "so_that": "it supports the goal: increase checkout completion for upgrade orders",
+      "priority": "should",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless customer on app or web",
+          "when": "they use the trade-in estimate",
+          "then": "the page shows a disclaimer that the final value is confirmed after device inspection"
+        }
+      ]
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-1",
+      "description": "Customers should be able to enter their current device model and condition during phone checkout and see an estimated trade-in value.",
+      "priority": "should",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-4"
+      ]
+    },
+    {
+      "id": "FR-2",
+      "description": "The estimate must be applied as a credit preview in the order summary.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-5"
+      ]
+    },
+    {
+      "id": "FR-3",
+      "description": "Customers must be able to skip the trade-in step and continue checkout.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-6"
+      ]
+    },
+    {
+      "id": "FR-4",
+      "description": "The estimate must come from the existing Trade-In Pricing Service.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-7"
+      ]
+    },
+    {
+      "id": "FR-5",
+      "description": "Show a disclaimer that the final value is confirmed after device inspection.",
+      "priority": "should",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-8"
+      ]
+    },
+    {
+      "id": "FR-6",
+      "description": "Track the funnel from trade-in step viewed to estimate shown to order placed.",
+      "priority": "should",
+      "category": "analytics",
+      "source": "input",
+      "refs": [
+        "F-12"
+      ]
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "NFR-1",
+      "description": "The estimate should load fast [measurable target for 'fast' TBD: OQ-3].",
+      "priority": "should",
+      "category": "performance & usability",
+      "source": "input",
+      "refs": [
+        "F-9",
+        "OQ-3"
+      ]
+    },
+    {
+      "id": "NFR-2",
+      "description": "All new UI on app or web meets WCAG 2.1 AA (screen-reader labels, 4.5:1 contrast, full keyboard/switch access).",
+      "priority": "must",
+      "category": "accessibility",
+      "source": "assumption",
+      "refs": [
+        "A-1"
+      ]
+    },
+    {
+      "id": "NFR-3",
+      "description": "Tracking events contain zero PII: no names, phone numbers, free-text message content or full account/card numbers.",
+      "priority": "must",
+      "category": "privacy",
+      "source": "assumption",
+      "refs": [
+        "A-2"
+      ]
+    },
+    {
+      "id": "NFR-4",
+      "description": "The flow should be easy to use [measurable target for 'easy' TBD: OQ-3].",
+      "priority": "should",
+      "category": "performance & usability",
+      "source": "input",
+      "refs": [
+        "F-9",
+        "OQ-3"
+      ]
+    }
+  ],
+  "analytics": {
+    "naming_convention": "snake_case <object>_<action>; action is a past-tense verb (viewed, selected, submitted…)",
+    "global_properties": [
+      {
+        "name": "platform",
+        "type": "enum",
+        "required": true,
+        "description": "Surface the event fired on (app or web)",
+        "allowed_values": [
+          "app",
+          "web"
+        ],
+        "example": null
+      },
+      {
+        "name": "brand",
+        "type": "enum",
+        "required": true,
+        "description": "Brand the customer account belongs to",
+        "allowed_values": [
+          "nimbus_wireless",
+          "nimbus_prepaid"
+        ],
+        "example": null
+      },
+      {
+        "name": "session_id",
+        "type": "string",
+        "required": true,
+        "description": "Analytics session identifier",
+        "allowed_values": null,
+        "example": null
+      }
+    ],
+    "events": [
+      {
+        "name": "trade_in_estimate_viewed",
+        "description": "The trade-in estimate is displayed to the customer",
+        "trigger": "Fires once per page load when the trade-in estimate is at least 50% in the viewport",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "entry_point",
+            "type": "string",
+            "required": true,
+            "description": "Screen or link the customer came from",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "screen_name",
+            "type": "string",
+            "required": true,
+            "description": "App screen or web page",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": []
+      },
+      {
+        "name": "trade_in_estimate_started",
+        "description": "Customer started the trade-in estimate",
+        "trigger": "Customer taps the trade-in estimate entry control and the trade-in estimate renders",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "entry_point",
+            "type": "string",
+            "required": true,
+            "description": "Screen or link the customer came from",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-1"
+        ]
+      },
+      {
+        "name": "trade_in_estimate_completed",
+        "description": "The trade-in estimate returned a result",
+        "trigger": "The trade-in estimate result is rendered to the customer (client-side)",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "device_model",
+            "type": "string",
+            "required": true,
+            "description": "Device model the customer entered",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "device_condition",
+            "type": "string",
+            "required": true,
+            "description": "Condition grade selected (values per OQ / service)",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "estimate_amount",
+            "type": "number",
+            "required": true,
+            "description": "Estimated value shown, in USD",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-2",
+          "FR-4",
+          "FR-5"
+        ]
+      },
+      {
+        "name": "trade_in_estimate_skipped",
+        "description": "Customer skipped the trade-in estimate step",
+        "trigger": "Customer taps the skip control on the trade-in estimate step",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "step_name",
+            "type": "string",
+            "required": true,
+            "description": "Name of the skipped step",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-3"
+        ]
+      },
+      {
+        "name": "trade_in_estimate_failed",
+        "description": "The trade-in estimate could not load or return a result",
+        "trigger": "Client receives an error or a timeout from the backing service",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "error_code",
+            "type": "string",
+            "required": true,
+            "description": "Service or client error code",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "failure_stage",
+            "type": "string",
+            "required": true,
+            "description": "Step where the failure happened",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": []
+      },
+      {
+        "name": "order_placed",
+        "description": "Order successfully submitted",
+        "trigger": "Existing trigger (see event dictionary, owner Device Commerce)",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "order_id",
+            "type": "string",
+            "required": true,
+            "description": "As defined in the event dictionary",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "order_type",
+            "type": "string",
+            "required": true,
+            "description": "As defined in the event dictionary",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "order_value",
+            "type": "number",
+            "required": true,
+            "description": "As defined in the event dictionary",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "existing",
+        "related_requirements": []
+      }
+    ],
+    "success_metrics": [
+      {
+        "name": "Increase checkout completion for upgrade orders",
+        "definition": "Sessions with `order_placed` ÷ sessions with `trade_in_estimate_viewed`, split by platform",
+        "target": "TBD (OQ-4)",
+        "events": [
+          "trade_in_estimate_viewed",
+          "order_placed"
+        ]
+      },
+      {
+        "name": "Reduce trade-in related calls to care",
+        "definition": "Care contacts on this topic per 1,000 customers who fired `trade_in_estimate_viewed` (care data source TBD, OQ-6).",
+        "target": "TBD (OQ-5)",
+        "events": [
+          "trade_in_estimate_viewed"
+        ]
+      }
+    ]
+  },
+  "data_model_changes": [
+    {
+      "entity": "Event dictionary",
+      "change_type": "add",
+      "fields": [
+        "trade_in_estimate_completed",
+        "trade_in_estimate_failed",
+        "trade_in_estimate_skipped",
+        "trade_in_estimate_started",
+        "trade_in_estimate_viewed"
+      ],
+      "description": "Register the new tracking events; update the modified ones: none.",
+      "source": "assumption"
+    }
+  ],
+  "api_changes": [
+    {
+      "method": "GET",
+      "path": "/v1/trade-in-pricing",
+      "change_type": "add",
+      "description": "PROPOSED client-facing read endpoint backed by Trade-In Pricing Service (A-3); confirm contract, auth and caching.",
+      "source": "assumption"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "Trade-In Pricing Service",
+      "type": "service",
+      "description": "The estimate must come from the existing Trade-In Pricing Service",
+      "source": "input"
+    },
+    {
+      "name": "Analytics / event dictionary owners",
+      "type": "team",
+      "description": "Review new and modified events before release.",
+      "source": "assumption"
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "EC-1",
+      "scenario": "Trade-In Pricing Service times out or returns an error",
+      "expected_behavior": "Show a non-blocking error state, let the customer continue, and fire `trade_in_estimate_failed` with error_code.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-2",
+      "scenario": "Customer skips the step, then navigates back to it",
+      "expected_behavior": "The step is shown again with nothing pre-applied; no duplicate credit is created.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-3",
+      "scenario": "Customer in a group whose eligibility is unresolved (OQ-1: Are Nimbus Prepaid customers eligible?)",
+      "expected_behavior": "Behaviour follows the answer to OQ-1; until it is resolved the feature stays hidden for that group.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-4",
+      "scenario": "Customer starts on app and finishes on web (or vice versa)",
+      "expected_behavior": "Same content on both; events keep identical names and differ only in `platform`.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-5",
+      "scenario": "Analytics is blocked or consent is declined",
+      "expected_behavior": "The feature works normally; no events are sent and no errors are shown.",
+      "source": "assumption"
+    }
+  ],
+  "rollout": {
+    "feature_flag": "trade_in_estimate_enabled",
+    "phases": [
+      {
+        "name": "Internal dogfood",
+        "audience": "Employee and test accounts",
+        "exposure_percent": 0,
+        "exit_criteria": "No P1/P2 defects; all events validated in the analytics debugger"
+      },
+      {
+        "name": "Pilot",
+        "audience": "Nimbus Wireless customers on app or web",
+        "exposure_percent": 5,
+        "exit_criteria": "Error rate and care contacts at or below baseline for 7 days"
+      },
+      {
+        "name": "Ramp",
+        "audience": "Same",
+        "exposure_percent": 50,
+        "exit_criteria": "Primary metric not worse than control"
+      },
+      {
+        "name": "General availability",
+        "audience": "All eligible customers",
+        "exposure_percent": 100,
+        "exit_criteria": "Experiment readout signed off"
+      }
+    ],
+    "experiment": {
+      "hypothesis": "Exposing the trade-in estimate in phone checkout improves: Increase checkout completion for upgrade orders.",
+      "variants": [
+        "control: current experience",
+        "treatment: trade-in estimate in phone checkout"
+      ],
+      "randomization_unit": "customer account (all lines on an account see the same variant)",
+      "primary_metric": "Increase checkout completion for upgrade orders",
+      "guardrail_metrics": [
+        "`trade_in_estimate_failed` rate",
+        "care contact rate"
+      ],
+      "minimum_detectable_effect": "TBD (OQ-7)"
+    },
+    "rollback_plan": "Turn off `trade_in_estimate_enabled`; customers fall back to the current experience. Basis: A-4.",
+    "source": "assumption"
+  },
+  "test_plan": [
+    {
+      "id": "TC-1",
+      "title": "Verify FR-1",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they enter their current device model and condition during phone checkout"
+      ],
+      "expected_result": "An estimated trade-in value is displayed",
+      "covers": [
+        "FR-1",
+        "US-1"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify FR-2",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the trade-in estimate"
+      ],
+      "expected_result": "The estimate is applied as a credit preview in the order summary",
+      "covers": [
+        "FR-2",
+        "US-2"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify FR-3",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they skip the trade-in step and continue checkout"
+      ],
+      "expected_result": "The customer can skip the trade-in step and continue checkout",
+      "covers": [
+        "FR-3",
+        "US-3"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify FR-4",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the trade-in estimate"
+      ],
+      "expected_result": "The estimate comes from the existing Trade-In Pricing Service",
+      "covers": [
+        "FR-4",
+        "US-4"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-5",
+      "title": "Verify FR-5",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless customer on app or web",
+        "When they use the trade-in estimate"
+      ],
+      "expected_result": "The page shows a disclaimer that the final value is confirmed after device inspection",
+      "covers": [
+        "FR-5",
+        "US-5"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-6",
+      "title": "Verify FR-6",
+      "type": "analytics",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in FR-6"
+      ],
+      "expected_result": "Track the funnel from trade-in step viewed to estimate shown to order placed",
+      "covers": [
+        "FR-6"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-7",
+      "title": "Verify NFR-1",
+      "type": "performance",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-1"
+      ],
+      "expected_result": "The estimate loads fast",
+      "covers": [
+        "NFR-1"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-8",
+      "title": "Verify NFR-2",
+      "type": "accessibility",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-2"
+      ],
+      "expected_result": "All new UI on app or web meets WCAG 2.1 AA (screen-reader labels, 4.5:1 contrast, full keyboard/switch access)",
+      "covers": [
+        "NFR-2"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-9",
+      "title": "Verify NFR-3",
+      "type": "analytics",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-3"
+      ],
+      "expected_result": "Tracking events contain zero PII: no names, phone numbers, free-text message content or full account/card numbers",
+      "covers": [
+        "NFR-3"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-10",
+      "title": "Analytics: `trade_in_estimate_viewed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Fires once per page load when the trade-in estimate is at least 50% in the viewport",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: entry_point, screen_name; values match the UI.",
+      "covers": [],
+      "events_verified": [
+        "trade_in_estimate_viewed"
+      ]
+    },
+    {
+      "id": "TC-11",
+      "title": "Analytics: `trade_in_estimate_started` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Customer taps the trade-in estimate entry control and the trade-in estimate renders",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: entry_point; values match the UI.",
+      "covers": [
+        "FR-1"
+      ],
+      "events_verified": [
+        "trade_in_estimate_started"
+      ]
+    },
+    {
+      "id": "TC-12",
+      "title": "Analytics: `trade_in_estimate_completed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: The trade-in estimate result is rendered to the customer (client-side)",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: device_model, device_condition, estimate_amount; values match the UI.",
+      "covers": [
+        "FR-2",
+        "FR-4",
+        "FR-5"
+      ],
+      "events_verified": [
+        "trade_in_estimate_completed"
+      ]
+    },
+    {
+      "id": "TC-13",
+      "title": "Analytics: `trade_in_estimate_skipped` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Customer taps the skip control on the trade-in estimate step",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: step_name; values match the UI.",
+      "covers": [
+        "FR-3"
+      ],
+      "events_verified": [
+        "trade_in_estimate_skipped"
+      ]
+    },
+    {
+      "id": "TC-14",
+      "title": "Analytics: `trade_in_estimate_failed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Client receives an error or a timeout from the backing service",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: error_code, failure_stage; values match the UI.",
+      "covers": [],
+      "events_verified": [
+        "trade_in_estimate_failed"
+      ]
+    },
+    {
+      "id": "TC-15",
+      "title": "Analytics: `order_placed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Existing trigger (see event dictionary, owner Device Commerce)",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: order_id, order_type, order_value; values match the UI.",
+      "covers": [],
+      "events_verified": [
+        "order_placed"
+      ]
+    },
+    {
+      "id": "TC-16",
+      "title": "Verify NFR-4",
+      "type": "performance",
+      "steps": [
+        "Exercise the behaviour in NFR-4"
+      ],
+      "expected_result": "The flow is easy to use [measurable target for 'easy' TBD: OQ-3]",
+      "covers": [
+        "NFR-4"
+      ],
+      "events_verified": []
+    }
+  ],
+  "risks": [
+    {
+      "description": "Event names drift between app and web, breaking the cross-platform funnel",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "Treat section 7 as the single source; lint against the event dictionary in CI."
+    },
+    {
+      "description": "Trade-In Pricing Service latency or outage degrades the experience",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Timeouts with graceful fallback; alert on the failed-event rate."
+    },
+    {
+      "description": "1 blocking open question(s) delay build start",
+      "likelihood": "high",
+      "impact": "medium",
+      "mitigation": "Review open questions with owners before sprint planning."
+    },
+    {
+      "description": "Experiment is under-powered for the expected effect",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Size the test once the MDE is agreed."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A-1",
+      "statement": "Accessibility follows the company default of WCAG 2.1 AA.",
+      "validate_with": "UX Design"
+    },
+    {
+      "id": "A-2",
+      "statement": "Analytics events must not carry PII; this is standard instrumentation policy.",
+      "validate_with": "Privacy / Analytics governance"
+    },
+    {
+      "id": "A-3",
+      "statement": "API contracts below are placeholders until the owning team confirms them.",
+      "validate_with": "Owning engineering teams"
+    },
+    {
+      "id": "A-4",
+      "statement": "Rollout stages follow the standard flag-based ramp.",
+      "validate_with": "Release management"
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "OQ-1",
+      "question": "Are Nimbus Prepaid customers eligible?",
+      "why_it_matters": "The request explicitly leaves this open; it changes scope or eligibility logic.",
+      "suggested_owner": "Product",
+      "blocking": true
+    },
+    {
+      "id": "OQ-2",
+      "question": "Should we A/B test the placement of the trade-in step?",
+      "why_it_matters": "The request explicitly leaves this open; it changes scope or eligibility logic.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-3",
+      "question": "What measurable target defines 'fast', 'easy' in: \"The estimate should load fast and the flow should be easy to use\"?",
+      "why_it_matters": "Without a threshold the requirement cannot be tested or accepted.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-4",
+      "question": "What is the target and timeframe for: \"Increase checkout completion for upgrade orders\"?",
+      "why_it_matters": "Success metrics need a target to size the rollout and judge the launch.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-5",
+      "question": "What is the target and timeframe for: \"Reduce trade-in related calls to care\"?",
+      "why_it_matters": "Success metrics need a target to size the rollout and judge the launch.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-6",
+      "question": "Which care-contact data source and reason codes identify the calls in: \"Reduce trade-in related calls to care\"?",
+      "why_it_matters": "The metric cannot be computed from app/web events alone.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-7",
+      "question": "What are the primary metric, minimum detectable effect and planned duration of the experiment?",
+      "why_it_matters": "Needed to size the test and decide when to stop it.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-8",
+      "question": "Is `trade_in_estimate_viewed` the same user action as existing `trade_in_quote_viewed`? If so, reuse the existing event.",
+      "why_it_matters": "Avoids two events for one action, which double-counts the funnel.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    }
+  ],
+  "meta": {
+    "mode": "offline-demo",
+    "model": "mock",
+    "pipeline": "full",
+    "source_file": "examples/inputs/trade_in_estimate.md",
+    "generated_at": "2026-10-21 07:39 UTC",
+    "generator": "tech-spec-agent"
+  }
+}

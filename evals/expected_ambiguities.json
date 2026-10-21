@@ -1,0 +1,33 @@
+{
+  "_doc": "Hand-labelled gold set: the gaps a careful reviewer would raise for each example request. An item counts as caught when any keyword appears (case-insensitive) in the spec's open questions. Labelled from the request text alone, independent of any generator.",
+  "trade_in_estimate": [
+    {"gap": "Nimbus Prepaid eligibility", "any": ["prepaid"]},
+    {"gap": "Estimate load-time target ('fast')", "any": ["fast", "load time", "latency"]},
+    {"gap": "Usability target ('easy to use')", "any": ["easy"]},
+    {"gap": "A/B test of step placement", "any": ["a/b", "experiment"]},
+    {"gap": "Checkout-completion target", "any": ["checkout completion"]},
+    {"gap": "How care calls are measured", "any": ["care-contact", "reason code", "calls"]},
+    {"gap": "Allowed device condition grades", "any": ["condition"]},
+    {"gap": "What happens when the final inspected value differs from the estimate", "any": ["inspection", "final value", "differs"]}
+  ],
+  "ai_chat_bill_page": [
+    {"gap": "Legal review of bill data shared with the assistant", "any": ["legal"]},
+    {"gap": "Sub-users / non-owners visibility", "any": ["sub-user", "non-owner"]},
+    {"gap": "'Intuitive' entry point criteria", "any": ["intuitive"]},
+    {"gap": "Assistant response-time target", "any": ["quickly", "response time", "latency"]},
+    {"gap": "How billing care calls are measured", "any": ["care-contact", "reason code", "calls"]},
+    {"gap": "Definition of 'resolved without an agent'", "any": ["resolved"]},
+    {"gap": "Live-agent availability (hours, queue) for escalation", "any": ["hours", "availability", "queue"]},
+    {"gap": "Reuse vs new events for existing assistant instrumentation", "any": ["chat_assistant_opened", "existing event", "reuse"]}
+  ],
+  "plan_comparison": [
+    {"gap": "Logged-out visitor access", "any": ["logged-out", "logged out"]},
+    {"gap": "Page performance target ('fast')", "any": ["fast", "load time", "latency"]},
+    {"gap": "Visual design criteria ('modern')", "any": ["modern"]},
+    {"gap": "Accessibility target ('better accessibility')", "any": ["accessib"]},
+    {"gap": "Experiment design (metric, MDE, duration)", "any": ["experiment"]},
+    {"gap": "Plan-change conversion target", "any": ["conversion"]},
+    {"gap": "Allowed values for the number-of-lines filter", "any": ["number of lines", "line count", "lines filter"]},
+    {"gap": "Migration of legacy platform-specific events", "any": ["plancompare", "legacy", "migrat"]}
+  ]
+}

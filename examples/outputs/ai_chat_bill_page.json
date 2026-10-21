@@ -1,0 +1,808 @@
+{
+  "title": "AI chat assistant entry point on the bill page",
+  "overview": "AI chat assistant entry point on the bill page for Nimbus Wireless or Nimbus Prepaid customers on app or web. Headline ask: Add a \"Questions about your bill?\" entry point on the bill page that opens the AI chat assistant. This spec captures 5 functional and 4 non-functional requirements, 5 tracking events, the rollout and test plan, and the open questions the request leaves unanswered (section 15).",
+  "problem_statement": "Billing questions are the largest driver of care calls in the first week after a bill is issued. Most of them are simple, such as why the bill went up or when a promo credit ends. The AI chat assistant already exists in the Help section, but very few customers find it from the bill page.",
+  "goals": [
+    "Reduce billing-related calls to care",
+    "Increase the share of bill-page chat sessions resolved without an agent"
+  ],
+  "non_goals": [
+    "Changing the assistant's underlying model or knowledge base",
+    "Proactive push notifications about the bill"
+  ],
+  "user_stories": [
+    {
+      "id": "US-1",
+      "as_a": "Nimbus Wireless or Nimbus Prepaid customer",
+      "i_want": "a \"Questions about your bill?\" entry point on the bill page that opens the AI chat assistant",
+      "so_that": "it supports the goal: reduce billing-related calls to care",
+      "priority": "should",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+          "when": "they use the AI chat assistant",
+          "then": "there is a \"Questions about your bill?\" entry point on the bill page that opens the AI chat assistant"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they use the AI chat assistant",
+          "then": "`ai_chat_assistant_opened` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-2",
+      "as_a": "Nimbus Wireless or Nimbus Prepaid customer",
+      "i_want": "the assistant to receive the current bill period and account context so I do not have to re-explain when opened from the bill page",
+      "so_that": "it supports the goal: reduce billing-related calls to care",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+          "when": "they use the AI chat assistant",
+          "then": "the assistant receives the current bill period and account context so the customer does not have to re-explain when opened from the bill page"
+        }
+      ]
+    },
+    {
+      "id": "US-3",
+      "as_a": "Nimbus Wireless or Nimbus Prepaid customer",
+      "i_want": "to escalate to a live care agent from the chat at any time",
+      "so_that": "it supports the goal: reduce billing-related calls to care",
+      "priority": "must",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+          "when": "they escalate to a live care agent from the chat at any time",
+          "then": "the customer can escalate to a live care agent from the chat at any time"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they escalate to a live care agent from the chat at any time",
+          "then": "`ai_chat_assistant_escalated` fires exactly once with all required properties"
+        }
+      ]
+    },
+    {
+      "id": "US-4",
+      "as_a": "Nimbus Wireless or Nimbus Prepaid customer",
+      "i_want": "to rate each answer with thumbs up or thumbs down",
+      "so_that": "it supports the goal: reduce billing-related calls to care",
+      "priority": "should",
+      "acceptance_criteria": [
+        {
+          "given": "a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+          "when": "they rate each answer with thumbs up or thumbs down",
+          "then": "the customer can rate each answer with thumbs up or thumbs down"
+        },
+        {
+          "given": "analytics is enabled for the session",
+          "when": "they rate each answer with thumbs up or thumbs down",
+          "then": "`ai_chat_assistant_feedback_submitted` fires exactly once with all required properties"
+        }
+      ]
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-1",
+      "description": "Add a \"Questions about your bill?\" entry point on the bill page that opens the AI chat assistant.",
+      "priority": "should",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-4"
+      ]
+    },
+    {
+      "id": "FR-2",
+      "description": "When opened from the bill page, the assistant must receive the current bill period and account context so the customer does not have to re-explain.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-5"
+      ]
+    },
+    {
+      "id": "FR-3",
+      "description": "Customers must be able to escalate to a live care agent from the chat at any time.",
+      "priority": "must",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-7"
+      ]
+    },
+    {
+      "id": "FR-4",
+      "description": "Customers should be able to rate each answer with thumbs up or thumbs down.",
+      "priority": "should",
+      "category": "functional",
+      "source": "input",
+      "refs": [
+        "F-8"
+      ]
+    },
+    {
+      "id": "FR-5",
+      "description": "Track entry point views, chat opens, messages, escalations and ratings.",
+      "priority": "should",
+      "category": "analytics",
+      "source": "input",
+      "refs": [
+        "F-12"
+      ]
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "NFR-1",
+      "description": "The assistant must never display full payment card or bank account numbers.",
+      "priority": "must",
+      "category": "privacy & security",
+      "source": "input",
+      "refs": [
+        "F-6"
+      ]
+    },
+    {
+      "id": "NFR-2",
+      "description": "The entry point should be intuitive [measurable target for 'intuitive' TBD: OQ-3].",
+      "priority": "should",
+      "category": "performance & usability",
+      "source": "input",
+      "refs": [
+        "F-9",
+        "OQ-3"
+      ]
+    },
+    {
+      "id": "NFR-3",
+      "description": "All new UI on app or web meets WCAG 2.1 AA (screen-reader labels, 4.5:1 contrast, full keyboard/switch access).",
+      "priority": "must",
+      "category": "accessibility",
+      "source": "assumption",
+      "refs": [
+        "A-1"
+      ]
+    },
+    {
+      "id": "NFR-4",
+      "description": "Tracking events contain zero PII: no names, phone numbers, free-text message content or full account/card numbers.",
+      "priority": "must",
+      "category": "privacy",
+      "source": "assumption",
+      "refs": [
+        "A-2"
+      ]
+    },
+    {
+      "id": "NFR-5",
+      "description": "The assistant should respond quickly [measurable target for 'quickly' TBD: OQ-3].",
+      "priority": "should",
+      "category": "performance & usability",
+      "source": "input",
+      "refs": [
+        "F-9",
+        "OQ-3"
+      ]
+    }
+  ],
+  "analytics": {
+    "naming_convention": "snake_case <object>_<action>; action is a past-tense verb (viewed, selected, submitted…)",
+    "global_properties": [
+      {
+        "name": "platform",
+        "type": "enum",
+        "required": true,
+        "description": "Surface the event fired on (app or web)",
+        "allowed_values": [
+          "app",
+          "web"
+        ],
+        "example": null
+      },
+      {
+        "name": "brand",
+        "type": "enum",
+        "required": true,
+        "description": "Brand the customer account belongs to",
+        "allowed_values": [
+          "nimbus_wireless",
+          "nimbus_prepaid"
+        ],
+        "example": null
+      },
+      {
+        "name": "session_id",
+        "type": "string",
+        "required": true,
+        "description": "Analytics session identifier",
+        "allowed_values": null,
+        "example": null
+      }
+    ],
+    "events": [
+      {
+        "name": "ai_chat_assistant_entry_viewed",
+        "description": "The AI chat assistant entry point is displayed to the customer",
+        "trigger": "Fires once per page load when the AI chat assistant entry point is at least 50% in the viewport",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "entry_point",
+            "type": "string",
+            "required": true,
+            "description": "Screen or link the customer came from",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "screen_name",
+            "type": "string",
+            "required": true,
+            "description": "App screen or web page",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": []
+      },
+      {
+        "name": "ai_chat_assistant_opened",
+        "description": "Customer opened the AI chat assistant",
+        "trigger": "Customer taps the AI chat assistant entry control and the AI chat assistant renders",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "entry_point",
+            "type": "string",
+            "required": true,
+            "description": "Screen or link the customer came from",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-1",
+          "FR-2"
+        ]
+      },
+      {
+        "name": "ai_chat_assistant_message_sent",
+        "description": "Customer sent a message in the AI chat assistant",
+        "trigger": "Message is submitted from the AI chat assistant input (fires on client send)",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "message_count",
+            "type": "integer",
+            "required": true,
+            "description": "Count of customer messages in the session so far",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "message_length",
+            "type": "integer",
+            "required": true,
+            "description": "Characters in the message (content is never sent)",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": []
+      },
+      {
+        "name": "ai_chat_assistant_escalated",
+        "description": "Conversation escalated to a live agent",
+        "trigger": "Customer confirms the escalate-to-agent action and the handoff request is accepted",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "message_count",
+            "type": "integer",
+            "required": true,
+            "description": "Customer messages before escalation",
+            "allowed_values": null,
+            "example": null
+          },
+          {
+            "name": "escalation_reason",
+            "type": "string",
+            "required": false,
+            "description": "Reason selected by the customer, if any",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-3"
+        ]
+      },
+      {
+        "name": "ai_chat_assistant_feedback_submitted",
+        "description": "Customer rated an answer",
+        "trigger": "Customer taps thumbs up or thumbs down on an answer",
+        "platforms": [
+          "app",
+          "web"
+        ],
+        "properties": [
+          {
+            "name": "rating",
+            "type": "enum",
+            "required": true,
+            "description": "Rating given",
+            "allowed_values": [
+              "thumbs_up",
+              "thumbs_down"
+            ],
+            "example": null
+          },
+          {
+            "name": "answer_id",
+            "type": "string",
+            "required": true,
+            "description": "ID of the rated answer",
+            "allowed_values": null,
+            "example": null
+          }
+        ],
+        "status": "new",
+        "related_requirements": [
+          "FR-4"
+        ]
+      }
+    ],
+    "success_metrics": [
+      {
+        "name": "Reduce billing-related calls to care",
+        "definition": "Care contacts on this topic per 1,000 customers who fired `ai_chat_assistant_entry_viewed` (care data source TBD, OQ-5).",
+        "target": "TBD (OQ-4)",
+        "events": [
+          "ai_chat_assistant_entry_viewed"
+        ]
+      },
+      {
+        "name": "Increase the share of bill-page chat sessions resolved without an agent",
+        "definition": "1 - (sessions with `ai_chat_assistant_escalated` ÷ sessions with `ai_chat_assistant_opened`)",
+        "target": "TBD (OQ-6)",
+        "events": [
+          "ai_chat_assistant_opened",
+          "ai_chat_assistant_escalated"
+        ]
+      }
+    ]
+  },
+  "data_model_changes": [
+    {
+      "entity": "Event dictionary",
+      "change_type": "add",
+      "fields": [
+        "ai_chat_assistant_entry_viewed",
+        "ai_chat_assistant_escalated",
+        "ai_chat_assistant_feedback_submitted",
+        "ai_chat_assistant_message_sent",
+        "ai_chat_assistant_opened"
+      ],
+      "description": "Register the new tracking events; update the modified ones: none.",
+      "source": "assumption"
+    }
+  ],
+  "api_changes": [],
+  "dependencies": [
+    {
+      "name": "Legal",
+      "type": "legal",
+      "description": "Legal needs to review how bill data is shared with the assistant",
+      "source": "input"
+    },
+    {
+      "name": "Analytics / event dictionary owners",
+      "type": "team",
+      "description": "Review new and modified events before release.",
+      "source": "assumption"
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "EC-1",
+      "scenario": "Customer types a full card or bank number into the chat",
+      "expected_behavior": "The number is masked in the transcript and never sent to analytics.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-2",
+      "scenario": "Customer in a group whose eligibility is unresolved (OQ-2: Should account sub-users (non-owners) see the entry point?)",
+      "expected_behavior": "Behaviour follows the answer to OQ-2; until it is resolved the feature stays hidden for that group.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-3",
+      "scenario": "Customer starts on app and finishes on web (or vice versa)",
+      "expected_behavior": "Same content on both; events keep identical names and differ only in `platform`.",
+      "source": "assumption"
+    },
+    {
+      "id": "EC-4",
+      "scenario": "Analytics is blocked or consent is declined",
+      "expected_behavior": "The feature works normally; no events are sent and no errors are shown.",
+      "source": "assumption"
+    }
+  ],
+  "rollout": {
+    "feature_flag": "ai_chat_assistant_enabled",
+    "phases": [
+      {
+        "name": "Internal dogfood",
+        "audience": "Employee and test accounts",
+        "exposure_percent": 0,
+        "exit_criteria": "No P1/P2 defects; all events validated in the analytics debugger"
+      },
+      {
+        "name": "Pilot",
+        "audience": "Nimbus Wireless or Nimbus Prepaid customers on app or web",
+        "exposure_percent": 5,
+        "exit_criteria": "Error rate and care contacts at or below baseline for 7 days"
+      },
+      {
+        "name": "Ramp",
+        "audience": "Same",
+        "exposure_percent": 50,
+        "exit_criteria": "Primary metric not worse than control"
+      },
+      {
+        "name": "General availability",
+        "audience": "All eligible customers",
+        "exposure_percent": 100,
+        "exit_criteria": "Experiment readout signed off"
+      }
+    ],
+    "experiment": null,
+    "rollback_plan": "Turn off `ai_chat_assistant_enabled`; customers fall back to the current experience. Basis: A-3.",
+    "source": "assumption"
+  },
+  "test_plan": [
+    {
+      "id": "TC-1",
+      "title": "Verify FR-1",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+        "When they use the AI chat assistant"
+      ],
+      "expected_result": "There is a \"Questions about your bill?\" entry point on the bill page that opens the AI chat assistant",
+      "covers": [
+        "FR-1",
+        "US-1"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify FR-2",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+        "When they use the AI chat assistant"
+      ],
+      "expected_result": "The assistant receives the current bill period and account context so the customer does not have to re-explain when opened from the bill page",
+      "covers": [
+        "FR-2",
+        "US-2"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify FR-3",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+        "When they escalate to a live care agent from the chat at any time"
+      ],
+      "expected_result": "The customer can escalate to a live care agent from the chat at any time",
+      "covers": [
+        "FR-3",
+        "US-3"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify FR-4",
+      "type": "e2e",
+      "steps": [
+        "Given a signed-in Nimbus Wireless or Nimbus Prepaid customer on app or web",
+        "When they rate each answer with thumbs up or thumbs down"
+      ],
+      "expected_result": "The customer can rate each answer with thumbs up or thumbs down",
+      "covers": [
+        "FR-4",
+        "US-4"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-5",
+      "title": "Verify FR-5",
+      "type": "analytics",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in FR-5"
+      ],
+      "expected_result": "Track entry point views, chat opens, messages, escalations and ratings",
+      "covers": [
+        "FR-5"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-6",
+      "title": "Verify NFR-1",
+      "type": "e2e",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-1"
+      ],
+      "expected_result": "The assistant never displays full payment card or bank account numbers",
+      "covers": [
+        "NFR-1"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-7",
+      "title": "Verify NFR-2",
+      "type": "performance",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-2"
+      ],
+      "expected_result": "The entry point is intuitive",
+      "covers": [
+        "NFR-2"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-8",
+      "title": "Verify NFR-3",
+      "type": "accessibility",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-3"
+      ],
+      "expected_result": "All new UI on app or web meets WCAG 2.1 AA (screen-reader labels, 4.5:1 contrast, full keyboard/switch access)",
+      "covers": [
+        "NFR-3"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-9",
+      "title": "Verify NFR-4",
+      "type": "analytics",
+      "steps": [
+        "Set up a test account with the feature flag on",
+        "Exercise the behaviour in NFR-4"
+      ],
+      "expected_result": "Tracking events contain zero PII: no names, phone numbers, free-text message content or full account/card numbers",
+      "covers": [
+        "NFR-4"
+      ],
+      "events_verified": []
+    },
+    {
+      "id": "TC-10",
+      "title": "Analytics: `ai_chat_assistant_entry_viewed` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Fires once per page load when the AI chat assistant entry point is at least 50% in the viewport",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: entry_point, screen_name; values match the UI.",
+      "covers": [],
+      "events_verified": [
+        "ai_chat_assistant_entry_viewed"
+      ]
+    },
+    {
+      "id": "TC-11",
+      "title": "Analytics: `ai_chat_assistant_opened` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Customer taps the AI chat assistant entry control and the AI chat assistant renders",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: entry_point; values match the UI.",
+      "covers": [
+        "FR-1",
+        "FR-2"
+      ],
+      "events_verified": [
+        "ai_chat_assistant_opened"
+      ]
+    },
+    {
+      "id": "TC-12",
+      "title": "Analytics: `ai_chat_assistant_message_sent` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Message is submitted from the AI chat assistant input (fires on client send)",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: message_count, message_length; values match the UI.",
+      "covers": [],
+      "events_verified": [
+        "ai_chat_assistant_message_sent"
+      ]
+    },
+    {
+      "id": "TC-13",
+      "title": "Analytics: `ai_chat_assistant_escalated` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Customer confirms the escalate-to-agent action and the handoff request is accepted",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: message_count, escalation_reason; values match the UI.",
+      "covers": [
+        "FR-3"
+      ],
+      "events_verified": [
+        "ai_chat_assistant_escalated"
+      ]
+    },
+    {
+      "id": "TC-14",
+      "title": "Analytics: `ai_chat_assistant_feedback_submitted` payload",
+      "type": "analytics",
+      "steps": [
+        "Trigger: Customer taps thumbs up or thumbs down on an answer",
+        "Inspect the event in the analytics debugger on app, web"
+      ],
+      "expected_result": "Fires exactly once with global properties and: rating, answer_id; values match the UI.",
+      "covers": [
+        "FR-4"
+      ],
+      "events_verified": [
+        "ai_chat_assistant_feedback_submitted"
+      ]
+    },
+    {
+      "id": "TC-15",
+      "title": "Verify NFR-5",
+      "type": "performance",
+      "steps": [
+        "Exercise the behaviour in NFR-5"
+      ],
+      "expected_result": "The assistant responds quickly [measurable target for 'quickly' TBD: OQ-3]",
+      "covers": [
+        "NFR-5"
+      ],
+      "events_verified": []
+    }
+  ],
+  "risks": [
+    {
+      "description": "Event names drift between app and web, breaking the cross-platform funnel",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "Treat section 7 as the single source; lint against the event dictionary in CI."
+    },
+    {
+      "description": "Legal review changes what data can be used",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "Start review now; design for the minimal data set."
+    },
+    {
+      "description": "2 blocking open question(s) delay build start",
+      "likelihood": "high",
+      "impact": "medium",
+      "mitigation": "Review open questions with owners before sprint planning."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A-1",
+      "statement": "Accessibility follows the company default of WCAG 2.1 AA.",
+      "validate_with": "UX Design"
+    },
+    {
+      "id": "A-2",
+      "statement": "Analytics events must not carry PII; this is standard instrumentation policy.",
+      "validate_with": "Privacy / Analytics governance"
+    },
+    {
+      "id": "A-3",
+      "statement": "Rollout stages follow the standard flag-based ramp.",
+      "validate_with": "Release management"
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "OQ-1",
+      "question": "What will Legal approve regarding how bill data is shared with the assistant?",
+      "why_it_matters": "Build cannot be finalised until the review outcome is known.",
+      "suggested_owner": "Legal",
+      "blocking": true
+    },
+    {
+      "id": "OQ-2",
+      "question": "Should account sub-users (non-owners) see the entry point?",
+      "why_it_matters": "The request explicitly leaves this open; it changes scope or eligibility logic.",
+      "suggested_owner": "Product",
+      "blocking": true
+    },
+    {
+      "id": "OQ-3",
+      "question": "What measurable target defines 'intuitive', 'quickly' in: \"The entry point should be intuitive and the assistant should respond quickly\"?",
+      "why_it_matters": "Without a threshold the requirement cannot be tested or accepted.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-4",
+      "question": "What is the target and timeframe for: \"Reduce billing-related calls to care\"?",
+      "why_it_matters": "Success metrics need a target to size the rollout and judge the launch.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-5",
+      "question": "Which care-contact data source and reason codes identify the calls in: \"Reduce billing-related calls to care\"?",
+      "why_it_matters": "The metric cannot be computed from app/web events alone.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-6",
+      "question": "What is the target and timeframe for: \"Increase the share of bill-page chat sessions resolved without an agent\"?",
+      "why_it_matters": "Success metrics need a target to size the rollout and judge the launch.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-7",
+      "question": "Is `ai_chat_assistant_opened` the same user action as existing `chat_assistant_opened`? If so, reuse the existing event.",
+      "why_it_matters": "Avoids two events for one action, which double-counts the funnel.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    },
+    {
+      "id": "OQ-8",
+      "question": "Is `ai_chat_assistant_message_sent` the same user action as existing `chat_assistant_message_sent`? If so, reuse the existing event.",
+      "why_it_matters": "Avoids two events for one action, which double-counts the funnel.",
+      "suggested_owner": "Analytics",
+      "blocking": false
+    }
+  ],
+  "meta": {
+    "mode": "offline-demo",
+    "model": "mock",
+    "pipeline": "full",
+    "source_file": "examples/inputs/ai_chat_bill_page.md",
+    "generated_at": "2026-10-21 07:39 UTC",
+    "generator": "tech-spec-agent"
+  }
+}

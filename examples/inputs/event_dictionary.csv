@@ -1,0 +1,12 @@
+event_name,description,trigger,platforms,properties,owner,status
+checkout_started,Customer begins a device or plan checkout,Checkout first step rendered,app|web,checkout_type:string;cart_value:number,Device Commerce,active
+order_placed,Order successfully submitted,Server confirms order creation,app|web,order_id:string;order_type:string;order_value:number,Device Commerce,active
+trade_in_quote_viewed,Legacy trade-in quote page viewed (standalone trade-in tool),Trade-in tool page rendered,web,device_model:string;quote_amount:number,Device Commerce,active
+bill_viewed,Customer views the current bill,Bill page rendered,app|web,bill_period:string;bill_amount:number,Billing,active
+chat_assistant_opened,AI chat assistant panel opened,Chat panel becomes visible,app|web,entry_point:string,Digital Care,active
+chat_assistant_message_sent,Customer sends a message to the AI assistant,Message submitted in chat panel,app|web,message_count:integer;entry_point:string,Digital Care,active
+ChatEscalateAgent,Legacy: chat escalated to live agent,Escalate button tapped,app,reason:string,Digital Care,deprecated
+plan_comparison_viewed,Plan comparison table viewed,Comparison page rendered,web,plans_shown_count:integer;entry_point:string,Plans & Pricing,active
+PlanCompare_Select,Legacy: plan selected from app plan carousel,Select button tapped on plan card,app,plan_id:string;monthly_price:string,Plans & Pricing,active
+plan_card_viewed,Plan card shown in the app carousel,Card scrolled into view,app,plan_id:string;monthly_price:string;position:integer,Plans & Pricing,active
+care_call_requested,Customer requests a callback from care,Callback form submitted,app|web,topic:string,Digital Care,active

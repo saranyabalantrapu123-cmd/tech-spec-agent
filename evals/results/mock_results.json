@@ -1,0 +1,154 @@
+{
+  "mode": "offline-demo",
+  "model": "mock",
+  "rows": [
+    {
+      "example": "ai_chat_bill_page",
+      "draft_score": 96.8,
+      "full": {
+        "score": 99.0,
+        "categories": {
+          "Section completeness": 20.0,
+          "User stories & acceptance criteria": 15.0,
+          "Requirement quality": 20.0,
+          "Tracking plan": 19.0,
+          "Consistency & traceability": 15.0,
+          "Ambiguity handling": 10.0
+        },
+        "lint_errors": 0,
+        "lint_warnings": 2,
+        "open_questions": 8,
+        "ambiguity_recall": 0.875,
+        "missed_gaps": [
+          "Live-agent availability (hours, queue) for escalation"
+        ],
+        "guardrail_relabels": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0
+      },
+      "single_pass": {
+        "score": 96.8,
+        "categories": {
+          "Section completeness": 20.0,
+          "User stories & acceptance criteria": 15.0,
+          "Requirement quality": 17.8,
+          "Tracking plan": 19.0,
+          "Consistency & traceability": 15.0,
+          "Ambiguity handling": 10.0
+        },
+        "lint_errors": 0,
+        "lint_warnings": 2,
+        "open_questions": 6,
+        "ambiguity_recall": 0.75,
+        "missed_gaps": [
+          "Live-agent availability (hours, queue) for escalation",
+          "Reuse vs new events for existing assistant instrumentation"
+        ],
+        "guardrail_relabels": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "example": "plan_comparison",
+      "draft_score": 96.0,
+      "full": {
+        "score": 98.5,
+        "categories": {
+          "Section completeness": 20.0,
+          "User stories & acceptance criteria": 15.0,
+          "Requirement quality": 20.0,
+          "Tracking plan": 18.5,
+          "Consistency & traceability": 15.0,
+          "Ambiguity handling": 10.0
+        },
+        "lint_errors": 1,
+        "lint_warnings": 1,
+        "open_questions": 7,
+        "ambiguity_recall": 0.875,
+        "missed_gaps": [
+          "Allowed values for the number-of-lines filter"
+        ],
+        "guardrail_relabels": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0
+      },
+      "single_pass": {
+        "score": 96.0,
+        "categories": {
+          "Section completeness": 20.0,
+          "User stories & acceptance criteria": 15.0,
+          "Requirement quality": 18.0,
+          "Tracking plan": 18.0,
+          "Consistency & traceability": 15.0,
+          "Ambiguity handling": 10.0
+        },
+        "lint_errors": 1,
+        "lint_warnings": 2,
+        "open_questions": 5,
+        "ambiguity_recall": 0.75,
+        "missed_gaps": [
+          "Allowed values for the number-of-lines filter",
+          "Migration of legacy platform-specific events"
+        ],
+        "guardrail_relabels": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "example": "trade_in_estimate",
+      "draft_score": 97.3,
+      "full": {
+        "score": 99.5,
+        "categories": {
+          "Section completeness": 20.0,
+          "User stories & acceptance criteria": 15.0,
+          "Requirement quality": 20.0,
+          "Tracking plan": 19.5,
+          "Consistency & traceability": 15.0,
+          "Ambiguity handling": 10.0
+        },
+        "lint_errors": 0,
+        "lint_warnings": 1,
+        "open_questions": 8,
+        "ambiguity_recall": 0.75,
+        "missed_gaps": [
+          "Allowed device condition grades",
+          "What happens when the final inspected value differs from the estimate"
+        ],
+        "guardrail_relabels": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0
+      },
+      "single_pass": {
+        "score": 97.3,
+        "categories": {
+          "Section completeness": 20.0,
+          "User stories & acceptance criteria": 15.0,
+          "Requirement quality": 17.8,
+          "Tracking plan": 19.5,
+          "Consistency & traceability": 15.0,
+          "Ambiguity handling": 10.0
+        },
+        "lint_errors": 0,
+        "lint_warnings": 1,
+        "open_questions": 7,
+        "ambiguity_recall": 0.75,
+        "missed_gaps": [
+          "Allowed device condition grades",
+          "What happens when the final inspected value differs from the estimate"
+        ],
+        "guardrail_relabels": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+data/
+*.egg-info/
+.DS_Store
+.streamlit/secrets.toml
+.streamlit_smoke.log
+# Local runs with a real model (the committed offline demo outputs stay tracked)
+examples/outputs/*.llm.*
+evals/results/*_results.*
+!evals/results/mock_results.*
